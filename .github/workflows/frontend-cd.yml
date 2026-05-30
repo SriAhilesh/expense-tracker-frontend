@@ -12,26 +12,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-      - run: npm run build
+      - name: Build Application
+        run: npm run build
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Verify Build Output
+        run: ls -R dist
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - run: |
-          aws s3 sync dist/ s3://${{ secrets.DEV_BUCKET }} --delete
+      - name: Upload Assets First
+        run: |
+          aws s3 sync dist/assets s3://${{ secrets.DEV_BUCKET }}/assets --delete
 
-      - run: |
+      - name: Upload Static Files
+        run: |
+          aws s3 cp dist/index.html s3://${{ secrets.DEV_BUCKET }}/index.html
+          aws s3 cp dist/favicon.svg s3://${{ secrets.DEV_BUCKET }}/favicon.svg
+
+      - name: Invalidate CloudFront Cache
+        run: |
           aws cloudfront create-invalidation \
           --distribution-id ${{ secrets.DEV_DISTRIBUTION_ID }} \
           --paths "/*"
@@ -41,26 +56,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-      - run: npm run build
+      - name: Build Application
+        run: npm run build
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Verify Build Output
+        run: ls -R dist
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - run: |
-          aws s3 sync dist/ s3://${{ secrets.PROD_BUCKET }} --delete
+      - name: Upload Assets First
+        run: |
+          aws s3 sync dist/assets s3://${{ secrets.PROD_BUCKET }}/assets --delete
 
-      - run: |
+      - name: Upload Static Files
+        run: |
+          aws s3 cp dist/index.html s3://${{ secrets.PROD_BUCKET }}/index.html
+          aws s3 cp dist/favicon.svg s3://${{ secrets.PROD_BUCKET }}/favicon.svg
+
+      - name: Invalidate CloudFront Cache
+        run: |
           aws cloudfront create-invalidation \
           --distribution-id ${{ secrets.PROD_DISTRIBUTION_ID }} \
           --paths "/*"
