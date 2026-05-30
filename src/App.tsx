@@ -22,7 +22,6 @@ function App() {
                 <Dashboard />
               </ProtectedRoute>
             }
-            const x=  
           />
 
           {/* Catch-all redirection */}
