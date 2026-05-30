@@ -46,7 +46,7 @@ export const Login: React.FC = () => {
             <Wallet className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-3xl font-bold text-white tracking-tight">Sri's Pay</h2>
-          <p className="text-slate-400 text-sm mt-1">Welcome back! Sign in to manage your budget</p>
+          <p className="text-slate-400 text-sm mt-1">Welcome back Leo Das ! Sign in to manage your budget</p>
         </div>
 
         {/* Login Form Panel */}
