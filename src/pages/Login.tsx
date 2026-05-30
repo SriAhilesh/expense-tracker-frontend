@@ -120,7 +120,7 @@ export const Login: React.FC = () => {
 
           {/* Prompt Signup */}
           <p className="text-center text-slate-400 text-sm mt-6">
-            New to Antigravity Pay?{' '}
+            New to LEOdass Pay?{' '}
             <Link to="/signup" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
               Create an account
             </Link>
