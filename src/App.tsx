@@ -15,13 +15,14 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           {/* Protected Dashboard route */}
-          <Route 
-            path="/" 
+          <Route
+            path="/"
             element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            } 
+            }
+            const x=  
           />
 
           {/* Catch-all redirection */}
