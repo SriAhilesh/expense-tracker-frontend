@@ -1,0 +1,44 @@
+name: Deploy Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version (Example: v1.0.0)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Release Artifact
+        run: |
+          curl -L \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -o dist.zip \
+          https://github.com/${{ github.repository }}/releases/download/${{ github.event.inputs.version }}/dist.zip
+
+      - name: Extract Artifact
+        run: |
+          unzip dist.zip -d dist
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy To Production Bucket
+        run: |
+          aws s3 sync dist/ s3://${{ secrets.PROD_BUCKET }} --delete
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+          --distribution-id ${{ secrets.PROD_DISTRIBUTION_ID }} \
+          --paths "/*"
