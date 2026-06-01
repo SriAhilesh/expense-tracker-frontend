@@ -45,7 +45,7 @@ export const Login: React.FC = () => {
           <div className="w-12 h-12 bg-gradient-to-tr from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-900/30 ring-1 ring-purple-400/30 mb-3">
             <Wallet className="w-6 h-6 text-white" />
           </div>
-          <h2 className="text-3xl font-bold text-white tracking-tight">Sri's Pay v2.0.0</h2>
+          <h2 className="text-3xl font-bold text-white tracking-tight">Sri's Pay v1.0.0</h2>
           <p className="text-slate-400 text-sm mt-1">Welcome back Leo Das ! Sign in to manage your budget</p>
         </div>
 
