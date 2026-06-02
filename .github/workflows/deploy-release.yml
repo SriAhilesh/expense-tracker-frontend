@@ -39,10 +39,9 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy To Production Bucket
-  run: |
-    aws s3 cp dist/index.html s3://${{ secrets.PROD_BUCKET }}/index.html
-
-    aws s3 sync dist/assets/ s3://${{ secrets.PROD_BUCKET }}/assets --delete
+        run: |
+          aws s3 cp dist/index.html s3://${{ secrets.PROD_BUCKET }}/index.html
+          aws s3 sync dist/assets/ s3://${{ secrets.PROD_BUCKET }}/assets --delete
 
       - name: Invalidate CloudFront
         run: |
